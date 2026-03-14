@@ -14,24 +14,24 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '27754146827921');
+    fbq('init', '1583483992907716');
     fbq('track', 'PageView');
   </script>
   <noscript>
     <img height="1" width="1" style="display:none"
-         src="https://www.facebook.com/tr?id=277541468792231&ev=PageView&noscript=1"/>
+         src="https://www.facebook.com/tr?id=1583483992907716&ev=PageView&noscript=1"/>
   </noscript>
   <!-- End Meta Pixel Code -->
   
   <!-- Meta Tags Open Graph (Facebook) -->
-  <meta property="og:title" content="Digitalmente · Grupo VIP de Moda e Moda Fitness">
+  <meta property="og:title" content="Digitalmente · Grupo VIP de BELEZA E MODA FEMININA">
   <meta property="og:description" content="Entre para o grupo VIP e receba os melhores achadinhos de moda, moda fitness, roupas, calçados e acessórios com descontos imperdíveis todos os dias!">
   <meta property="og:image" content="https://digitalmentebr.com.br/wp-content/uploads/2026/03/Screenshot_8.png">
   <meta property="og:url" content="https://digitalmentebr.com.br">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Digitalmente">
   
-  <title>Digitalmente · Grupo VIP de Moda e Moda Fitness</title>
+  <title>Grupo VIP de BELEZA E MODA FEMININA</title>
   <!-- Bootstrap 5 (mantido apenas para possíveis grids, mas não será usado no novo estilo) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Google Fonts -->
@@ -728,7 +728,7 @@
       </div>
 
       <h1>
-        Descontos em <span>LOOKS e MODA FITNESS</span> todos os dias no seu WhatsApp!
+        Descontos em <span>BELEZA e MODA FEMININA</span> todos os dias no seu WhatsApp!
       </h1>
       
       <div class="subhead">
@@ -860,8 +860,30 @@
   </div>
 
   <script>
-    // Link fixo do WhatsApp
-    let whatsappLink = 'https://chat.whatsapp.com/IccYyopE4st1fNEGz1jtvN';
+    // Variável global que armazenará o link dinâmico
+    let whatsappLink = '';
+
+    // ===== BUSCAR LINK DO SERVIDOR =====
+    async function fetchWhatsAppLink() {
+      try {
+        const response = await fetch('/get-link.php');
+        if (response.ok) {
+          whatsappLink = (await response.text()).trim();
+          console.log('✅ Link carregado:', whatsappLink);
+        } else {
+          console.error('❌ Erro ao buscar link. Status:', response.status);
+          // Fallback: usar link padrão
+          whatsappLink = 'https://chat.whatsapp.com/Csaededa'; // do seu whatsapp-link.txt
+        }
+      } catch (error) {
+        console.error('❌ Erro na requisição:', error);
+        whatsappLink = 'https://chat.whatsapp.com/Csaededa'; // fallback
+      }
+    }
+
+    // Chama a função assim que a página carrega
+    fetchWhatsAppLink();
+    // ====================================
 
     // Controle de vagas
     const totalSpots = 60;
@@ -929,7 +951,7 @@
         diminuirVagas(1);
         showToast();
       }
-    }, Math.random() * 1000 + 2000);
+    }, Math.random() * 2000 + 3000);
 
     function diminuirVagasAoEntrar() {
       if (vagas > 0) {
@@ -938,7 +960,7 @@
     }
 
     function redirectToWhatsApp() {
-        console.log('🔵 Botão clicado. Link:', whatsappLink);
+        console.log('🔵 Botão clicado. Link:', whatsappLink || 'fallback');
 
         diminuirVagasAoEntrar();
 
@@ -947,13 +969,16 @@
             console.log('📊 Evento Lead disparado');
         }
 
+        // Garantir que temos um link (caso a requisição ainda não tenha terminado)
+        const linkParaRedirecionar = whatsappLink || 'https://chat.whatsapp.com/Csaededa';
+
         const overlay = document.getElementById('countdownOverlay');
         if (overlay) {
             overlay.style.display = 'flex';
             console.log('🔄 Overlay exibido');
         } else {
             console.error('❌ Overlay não encontrado. Redirecionando direto...');
-            window.location.href = whatsappLink;
+            window.location.href = linkParaRedirecionar;
             return;
         }
 
@@ -968,8 +993,8 @@
             if (counter <= 0) {
                 clearInterval(interval);
                 overlay.style.display = 'none';
-                console.log('➡️ Redirecionando para:', whatsappLink);
-                window.location.href = whatsappLink;
+                console.log('➡️ Redirecionando para:', linkParaRedirecionar);
+                window.location.href = linkParaRedirecionar;
             }
         }, 1000);
     }
